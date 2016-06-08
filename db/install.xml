@@ -51,6 +51,7 @@
         <KEY NAME="material_id" TYPE="foreign" FIELDS="material_id" REFTABLE="gid_material" REFFIELDS="id"/>
         <KEY NAME="ramo_id" TYPE="foreign" FIELDS="ramo_id" REFTABLE="gid_ramo" REFFIELDS="id"/>
         <KEY NAME="curso_id" TYPE="foreign" FIELDS="ramo_id" REFTABLE="gid_curso" REFFIELDS="id"/>
+        <KEY NAME="user_id" TYPE="foreign" FIELDS="user_id" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="gid_curso" COMMENT="tabla para cursos">
