@@ -13,18 +13,17 @@ $PAGE->set_title ( get_string ( 'pluginname', 'local_teachersconnection' ) );
 $PAGE->set_heading ( get_string ( 'title', 'local_teachersconnection' ) );
 $PAGE->navbar->add ( get_string ( 'title', 'local_teachersconnection' ) );
 
-//rescatamos el ACTION, pueden ser: ver, agregar, publicacion
-$action = optional_param('action', 'agregar', PARAM_ACTION);
+//rescatamos el ACTION, pueden ser: ver, agregar, doc
+$action = optional_param('action', 'ver', PARAM_ACTION);
 
 echo $OUTPUT->header ();
-$destination_directory = '/files';
 
 
 if($action == 'ver'){
 	echo $OUTPUT->heading ( get_string ( 'searcher', 'local_teachersconnection' ) );
 	$url = new moodle_url('index.php', array(
 			'action' => 'agregar'));
-	echo $OUTPUT->single_button($url, get_string('publish', 'local_teachersconnection'));
+	echo $OUTPUT->single_button($url, get_string('publish', 'local_teachersconnection')).' '.$action;
 	$form_search = new proyect_search ( null );
 	echo $form_search->display ();
 	
@@ -46,10 +45,11 @@ if($action == 'ver'){
 }
 
 
-elseif ($action = 'agregar'){
-	echo $OUTPUT->heading ( get_string ( 'publish', 'local_teachersconnection' ) );$url = new moodle_url('index.php', array(
+elseif($action == 'agregar'){
+	echo $OUTPUT->heading ( get_string ( 'publish', 'local_teachersconnection' ) );
+	$url = new moodle_url('index.php', array(
 			'action' => ' ver'));
-	echo $OUTPUT->single_button($url, get_string('search', 'local_teachersconnection'));
+	echo $OUTPUT->single_button($url, get_string('search', 'local_teachersconnection')).' '.$action;
 	$form = new publish ( null );
 	echo $form->display ();
 	
@@ -59,8 +59,17 @@ elseif ($action = 'agregar'){
 	}
 }
 
-elseif ($action = 'publicacion'){
+elseif($action == 'doc'){
+	$id = $_POST['id'];
 	
+	$tabla = tables::datosDoc($id);
+	
+	if($tabla->data){
+		echo html_writer::table($tabla);
+	}else{
+		echo get_string ( 'error_seach', 'local_teachersconnection' );
+	}
 }
+
 
 echo $OUTPUT->footer (); //shows footer 

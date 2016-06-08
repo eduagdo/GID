@@ -78,7 +78,8 @@ class publish extends moodleform{
 		
 		$mform =& $this->_form;
 		
-		$document = $mform->addElement('text', 'name', get_string('file', 'local_teachersconnection'));
+		$document = $mform->addElement('text', 'documentos', get_string('file', 'local_teachersconnection'));
+		$mform->setType('documentos', PARAM_RAW);
 		
 		$ramoarray = array();
 		$ramos = $DB->get_records('gid_ramo');
