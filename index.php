@@ -13,19 +13,20 @@ $PAGE->set_title ( get_string ( 'pluginname', 'local_teachersconnection' ) );
 $PAGE->set_heading ( get_string ( 'title', 'local_teachersconnection' ) );
 $PAGE->navbar->add ( get_string ( 'title', 'local_teachersconnection' ) );
 
-//rescatamos el ACTION, pueden ser: ver, busqueda
-$action = optional_param('action', 'ver', PARAM_ACTION);
+//rescatamos el ACTION, pueden ser: ver, agregar, publicacion
+$action = optional_param('action', 'agregar', PARAM_ACTION);
 
 echo $OUTPUT->header ();
-echo $OUTPUT->heading ( get_string ( 'searcher', 'local_teachersconnection' ) );
+$destination_directory = '/files';
 
 
-//if($action == 'ver'){
-	echo $action."<br>";
+if($action == 'ver'){
+	echo $OUTPUT->heading ( get_string ( 'searcher', 'local_teachersconnection' ) );
+	$url = new moodle_url('index.php', array(
+			'action' => 'agregar'));
+	echo $OUTPUT->single_button($url, get_string('publish', 'local_teachersconnection'));
 	$form_search = new proyect_search ( null );
 	echo $form_search->display ();
-	
-	echo $context->id;
 	
 	if($fromform = $form_search->get_data ()){
 		$subject = $fromform->ramos;
@@ -42,35 +43,24 @@ echo $OUTPUT->heading ( get_string ( 'searcher', 'local_teachersconnection' ) );
 			echo get_string ( 'error_seach', 'local_teachersconnection' );
 		}
 	}
+}
+
+
+elseif ($action = 'agregar'){
+	echo $OUTPUT->heading ( get_string ( 'publish', 'local_teachersconnection' ) );$url = new moodle_url('index.php', array(
+			'action' => ' ver'));
+	echo $OUTPUT->single_button($url, get_string('search', 'local_teachersconnection'));
+	$form = new publish ( null );
+	echo $form->display ();
 	
+	if($fromform = $form->get_data ()){
+		echo $fromform->file;
+		$form->save_stored_file();
+	}
+}
+
+elseif ($action = 'publicacion'){
 	
-	
-	
-//}
-/*
-else if($action == 'busqueda'){
-	//echo $fromform->ramos."<br>";
-	//echo $fromform->profesores."<br>";
-	echo $action;
-}*/
+}
 
-/*
-query para buscar todas las publicaciones
-
-SELECT p.nombre as 'document', u.firstname, p.fecha_creacion as 'year', r.nombre as 'subject', m.nombre as 'material', p.clasificacion, p.descripcion FROM `mdl_gid_publicacion` as p
-INNER JOIN `mdl_gid_ramo`as r ON p.ramo_id = r.id
-INNER JOIN `mdl_gid_material` as m ON p.material_id = m.id
-inner join `mdl_user` as u ON p.user_id = u.id
-
-
-$email = $USER->email;
-
-//Display search form
-$form_search = new proyect_search ( null );
-echo $form_search->display ();
-
-$fromform = $form_search->get_data ();
-
-echo $fromform->ramos;
-*/
 echo $OUTPUT->footer (); //shows footer 

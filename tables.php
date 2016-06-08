@@ -4,6 +4,23 @@ require_once($CFG->libdir.'/formslib.php');
 class tablas{
 	public static function datosBusqueda($subject, $teacher, $year, $curse, $material){
 		global $DB;
+		$ramo = "'%'";
+		$profesor = "'%'";
+		$years = "'%'";
+		$curso = "'%'";
+		$tipo = "'%'";
+		
+		if($subject != 0)
+			$ramo = $subject;
+		if($teacher != 0)
+			$profesor = $teacher;
+		if($year != 0)
+			$years = $year;
+		if($curse != 0)
+			$curso = $curse;
+		if($material != 0)
+			$tipo = $material;
+		
 		
 		$tabla = new html_table();
 		$tabla->head = array(get_string('document', 'local_teachersconnection'), 
@@ -19,7 +36,12 @@ class tablas{
 											FROM `mdl_gid_publicacion` as p
 											INNER JOIN `mdl_gid_ramo`as r ON p.ramo_id = r.id
 											INNER JOIN `mdl_gid_material` as m ON p.material_id = m.id
-											INNER JOIN `mdl_user` as u ON p.user_id = u.id");
+											INNER JOIN `mdl_user` as u ON p.user_id = u.id
+											where `ramo_id` like $ramo
+											and `user_id` like $profesor
+											and `fecha_creacion` like $years
+											and `curso_id` like $curso
+											and `material_id` like $tipo");
 		foreach ($rasultados as $resultado){
 			$tabla->data[]=array($resultado->document,
 								$resultado->firstname,

@@ -41,3 +41,7 @@ $string['calification'] = 'Clasification';
 $string['description'] = 'Description';
 $string['error_seach'] = 'Error in search';
 $string['attachment'] = 'File to upload';
+$string['file'] = 'File title';
+$string['update'] = 'Update';
+$string['all'] = 'All';
+$string['publish'] = 'Publish';

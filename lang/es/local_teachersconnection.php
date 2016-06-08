@@ -40,3 +40,7 @@ $string['calification'] = 'Clasificación';
 $string['description'] = 'Descripción';
 $string['error_seach'] = 'Error en las busqueda';
 $string['attachment'] = 'Archivo a subir';
+$string['file'] = 'Titulo del archivo';
+$string['update'] = 'Subir';
+$string['all'] = 'Todos';
+$string['publish'] = 'Publicar';
