@@ -44,3 +44,4 @@ $string['file'] = 'Titulo del archivo';
 $string['update'] = 'Subir';
 $string['all'] = 'Todos';
 $string['publish'] = 'Publicar';
+$string['back'] = 'Atras';

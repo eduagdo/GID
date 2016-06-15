@@ -1,5 +1,7 @@
 <?php
 require_once (dirname ( __FILE__ ) . '/../../config.php');
+require_once($CFG->libdir.'/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot.'/local/teachersconnection/forms.php');
 require_once($CFG->dirroot.'/local/teachersconnection/tables.php');
 global $DB, $USER, $CFG, $OUTPUT;
@@ -49,13 +51,48 @@ elseif($action == 'agregar'){
 	echo $OUTPUT->heading ( get_string ( 'publish', 'local_teachersconnection' ) );
 	$url = new moodle_url('index.php', array(
 			'action' => ' ver'));
-	echo $OUTPUT->single_button($url, get_string('search', 'local_teachersconnection')).' '.$action;
+	$time = usergetdate(time());
+	$date = $time['year']."-".$time['mon']."-".$time['mday']." ".$time['hours'].":".$time['minutes'].":".$time['seconds'];
+	echo $OUTPUT->single_button($url, get_string('search', 'local_teachersconnection'));
 	$form = new publish ( null );
 	echo $form->display ();
 	
 	if($fromform = $form->get_data ()){
-		echo $fromform->file;
-		$form->save_stored_file();
+		
+		$record = new stdClass();
+		$record -> user_id = $USER->id;
+		$record -> nombre = $fromform->documentos;
+		$record -> fecha_creacion = $date;
+		$record -> material_id = $fromform->materiales;
+		$record -> ramo_id = $fromform->ramos;
+		$record -> curso_id = $fromform->cursos;
+		$record -> descripcion = $fromform->description;
+		$record -> clasificacion = 0;
+		
+		$lastinsertid = $DB->insert_record('gid_publicacion', $record, true);
+		
+		$draftid = file_get_submitted_draft_itemid('file');
+		$usercontext = context_user::instance($USER->id);
+		$fs = get_file_storage();
+		$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftid);
+		$context= context_system::instance();
+		foreach ($files as $uploadedfile) {
+			// Save the submitted file to check if it's a PDF.
+			if ($uploadedfile->get_mimetype() == 'application/pdf' || $uploadedfile->get_mimetype() == 'application/x-pdf') {
+				continue;
+			}
+			$filename = $uploadedfile->get_filename();
+			
+			$filerecord = array(
+					'component' => 'local_teachersconnection',
+					'filearea' => 'media',
+					'contextid' => $context->id,
+					'itemid' => $lastinsertid,
+					'filepath' => '/',
+					'filename' => $filename);
+			//guardo los archivos subidos, que estaban en el draf (temp) en una carpeta definitiva
+			$file = $fs->create_file_from_storedfile($filerecord, $uploadedfile->get_id());
+		}
 	}
 }
 
@@ -69,6 +106,10 @@ elseif($action == 'doc'){
 	}else{
 		echo get_string ( 'error_seach', 'local_teachersconnection' );
 	}
+	$url = new moodle_url('index.php', array(
+			'action' => 'ver'));
+	echo $OUTPUT->single_button($url, get_string('back', 'local_teachersconnection'));
+	
 }
 
 

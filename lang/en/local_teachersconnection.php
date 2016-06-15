@@ -45,3 +45,4 @@ $string['file'] = 'File title';
 $string['update'] = 'Update';
 $string['all'] = 'All';
 $string['publish'] = 'Publish';
+$string['back'] = 'Back';

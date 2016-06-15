@@ -65,7 +65,8 @@ class proyect_search extends moodleform{
 			$materialarray[$material -> id] = $material -> nombre;
 		}
 		$selectmateriales= $mform->addElement('select', 'materiales', get_string('choose_material', 'local_teachersconnection'), $materialarray);
-		//$mform->addElement('hidden', 'action', 'busqueda');
+		$mform->addElement('hidden', 'action', 'ver');
+		$mform->setType('action', PARAM_RAW);
 		
 		
 		$this->add_action_buttons(true, get_string('search', 'local_teachersconnection'));
@@ -103,12 +104,13 @@ class publish extends moodleform{
 		$selectmateriales= $mform->addElement('select', 'materiales', get_string('choose_material', 'local_teachersconnection'), $materialarray);
 		
 		
-	
-		//$maxbytes = '10485760';
 		$file = $mform->addElement('filemanager', 'file', get_string('attachment', 'local_teachersconnection'), null,
 				array('maxfiles' => 1,));
+		
 		$mform->addElement('textarea', 'description', get_string("description", "local_teachersconnection"), 'wrap="virtual" rows="5" cols="50"');
 		
+		$mform->addElement('hidden', 'action', 'agregar');
+		$mform->setType('action', PARAM_RAW);
 		
 		$this->add_action_buttons(true, get_string('update', 'local_teachersconnection'));
 	}
